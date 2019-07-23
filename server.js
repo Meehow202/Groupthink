@@ -5,7 +5,7 @@ var socket = require("socket.io")
 
 var app = express();
 console.log("*** STARTING SERVER ***")
-var server = app.listen(5000,function(){console.log("Listening for requests...")});
+var server = app.listen(process.env.PORT,function(){console.log("Listening for requests...")});
 
 app.use(express.static("public"));
 
