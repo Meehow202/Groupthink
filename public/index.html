@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="NoSleep.js"></script>
+    <head>
+	<style>
+	</style>
+        <meta charset="utf-8">
+		<link href="/styles.css" rel="stylesheet" />
+        <title>Groupthink</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    </head>
+    <body>
+		<div id="instruction" style="display:block"><p>Welcome to Groupthink! Join a game.</p></div>
+		<div id="answer" style="display:none"></div>
+		<input id = "username" type = "text" style="display:block" placeholder = "Enter your Username"/><br />
+        <input id = "roomcode" type = "text" style="display:block" placeholder = "Enter your Room Code"/><br />
+		<input style="display:none" id = "letter" type = "text" placeholder = "Enter your Letter" maxlength="1"/><br />
+		<input style="display:none" id = "question" type = "text" placeholder = "Enter your Question"/><br />
+		<button id = "join" style="display:block">Join</button>
+		<button id = "answer1" style="display:none">Answer 1</button>
+		<div style="display:block"><p><br></p></div>
+		<button id = "answer2" style="display:none">Answer 2</button>
+		<button id = "enter" style="display:none">Submit Letter</button>
+		<div style="display:block"><p><br></p></div>
+		<button id = "finish" style="display:none">Finish Answer</button>
+		<button id = "submitquestion" style="display:none">Submit Question</button>
+		<div id="output" style="display:block"></div>
+		<script src="/game.js"></script>
+    </body>
+</html>
