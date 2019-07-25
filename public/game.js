@@ -1,4 +1,4 @@
-var socket = io.connect("174.91.156.178:80")
+var socket = io.connect("209.97.159.17:80")
 var noSleep = new NoSleep();
 
 var roomcode = document.getElementById("roomcode")
