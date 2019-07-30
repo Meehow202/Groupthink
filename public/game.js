@@ -76,7 +76,7 @@ socket.on("getanswer", function(data){
 });
 
 socket.on("getvote", function(data){
-	if (state == "gettinganswers")
+	if (state == "gettinganswers" || state == "starting")
 	{
 		ResetElements();
 		instruction.style.display = "block";
