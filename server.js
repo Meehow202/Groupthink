@@ -58,6 +58,18 @@ io.on("connection", (socket) => {
         io.to(parsed.id).emit("finalanswer",parsed.message);
     });
 	
+	socket.on("rejoining", function(data){
+		console.log("reconnecting user");
+		var parsed = JSON.parse(data);
+		console.log(parsed.message);
+        io.to(parsed.id).emit("rejoining",parsed.message);
+    });
+	
+	socket.on("reconnectuser", function(data){
+		console.log(data);
+		socket.to(room).emit("reconnectuser",{message:data.oldname, sender: socket.id, id: data.newname});
+    });
+	
 	socket.on("getvote", function(data){
 		var parsed = JSON.parse(data);
         io.to(parsed.id).emit("getvote",{answer1:parsed.message, answer2:parsed.sender});

@@ -1,4 +1,4 @@
-var socket = io.connect("67.207.84.116:80")
+var socket = io.connect("localhost:80")
 var noSleep = new NoSleep();
 
 var roomcode = document.getElementById("roomcode")
@@ -14,6 +14,15 @@ var submitquestion = document.getElementById("submitquestion")
 var answer = document.getElementById("answer")
 var answer1 = document.getElementById("answer1")
 var answer2 = document.getElementById("answer2")
+var reconnect = document.getElementById("reconnect");
+var reconnectbuttons = [document.getElementById("reconnect0"),
+document.getElementById("reconnect1"),
+document.getElementById("reconnect2"),
+document.getElementById("reconnect3"),
+document.getElementById("reconnect4"),
+document.getElementById("reconnect5"),
+document.getElementById("reconnect6"),
+document.getElementById("reconnect7")];
 
 answer.style.textDecoration = "underline";
 
@@ -68,6 +77,24 @@ socket.on("command", function(data){
 	}
 });
 	
+socket.on("rejoining", function(data){
+	var disconnected = data.split("|");
+	instruction.innerHTML = "<p>Select a player to rejoin as.";
+	console.log(disconnected);
+	var i = 0;
+	for (i = 0; i < disconnected.length; i++)
+	{
+		if (i < 8)
+		{
+			reconnectbuttons[i].style.display = "block";
+			reconnectbuttons[i].innerHTML = disconnected[i];
+		}
+	}
+	ResetElements();
+	reconnect.style.display = "block";
+	instruction.style.display = "block";
+});
+
 socket.on("getanswer", function(data){
 	instruction.innerHTML = "<p>Submit your letter, or finish the word!</p>";
 	letter.style.display = "block";
@@ -91,10 +118,10 @@ socket.on("getvote", function(data){
 
 socket.on("finalanswer", function(data){
 	ResetElements();
-		answer.style.display = "block";
-		instruction.style.display = "block";
-		instruction.innerHTML = "<p>Waiting for responses.</p>";
-		state = "starting";
+	answer.style.display = "block";
+	instruction.style.display = "block";
+	instruction.innerHTML = "<p>Your team is finished! Waiting for the other team...</p>";
+	state = "starting";
 });
 
 socket.on("setanswer", function(data){
@@ -109,12 +136,47 @@ socket.on("setanswer", function(data){
 	}
 });
 
+reconnectbuttons[0].addEventListener("click", function(){
+	socket.emit("reconnectuser",{oldname:reconnectbuttons[0].innerHTML, newname:username.value});
+	reconnect.style.display = "none";
+});
+reconnectbuttons[1].addEventListener("click", function(){
+	socket.emit("reconnectuser",{oldname:reconnectbuttons[1].innerHTML, newname:username.value});
+	reconnect.style.display = "none";
+});
+reconnectbuttons[2].addEventListener("click", function(){
+	socket.emit("reconnectuser",{oldname:reconnectbuttons[2].innerHTML, newname:username.value});
+	reconnect.style.display = "none";
+});
+reconnectbuttons[3].addEventListener("click", function(){
+	socket.emit("reconnectuser",{oldname:reconnectbuttons[3].innerHTML, newname:username.value});
+	reconnect.style.display = "none";
+});
+reconnectbuttons[4].addEventListener("click", function(){
+	socket.emit("reconnectuser",{oldname:reconnectbuttons[4].innerHTML, newname:username.value});
+	reconnect.style.display = "none";
+});
+reconnectbuttons[5].addEventListener("click", function(){
+	socket.emit("reconnectuser",{oldname:reconnectbuttons[5].innerHTML, newname:username.value});
+	reconnect.style.display = "none";
+});
+reconnectbuttons[6].addEventListener("click", function(){
+	socket.emit("reconnectuser",{oldname:reconnectbuttons[6].innerHTML, newname:username.value});
+	reconnect.style.display = "none";
+});
+reconnectbuttons[7].addEventListener("click", function(){
+	socket.emit("reconnectuser",{oldname:reconnectbuttons[7].innerHTML, newname:username.value});
+	reconnect.style.display = "none";
+});
+
 join.addEventListener("click", function(){
 	if (state=="login")
 	{
 		noSleep.enable();
-		socket.emit("joinroom",{room : roomcode.value, user : username.value})
-		output.innerHTML = "<p>Waiting on server...</p>";
+		if (roomcode.value!="" && username.value !="" && !username.value.includes("|"))
+		{
+			socket.emit("joinroom",{room : roomcode.value.toLowerCase(), user : username.value})
+		}
 	}
 });
 
