@@ -12,7 +12,7 @@ body{
 
 #instruction {
 	padding: 10px 0px 30px 0px;
-	font-size: 18px;
+	font-size: 24px;
 }
 
 
@@ -48,5 +48,5 @@ button{
     border: 1px solid #644099;
     padding: 10px;
     border-radius: 5px;
-	outline-color: #644099;
+	outline-color: #FFDF0F;
 }
