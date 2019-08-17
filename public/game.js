@@ -177,6 +177,22 @@ join.addEventListener("click", function(){
 		{
 			socket.emit("joinroom",{room : roomcode.value.toLowerCase(), user : username.value})
 		}
+		else if (roomcode.value == "")
+		{
+			output.innerHTML = "<p>Please enter a room code.</p>";
+		}
+		else if (username.value == "")
+		{
+			output.innerHTML = "<p>Please enter a username.</p>";
+		}
+		else if (!username.value.includes("|"))
+		{
+			output.innerHTML = "<p>Please enter a valid username.</p>";
+		}
+		else
+		{
+			output.innerHTML = "<p>Waiting on server...</p>";
+		}
 	}
 });
 
