@@ -185,7 +185,7 @@ join.addEventListener("click", function(){
 		{
 			output.innerHTML = "<p>Please enter a username.</p>";
 		}
-		else if (!username.value.includes("|"))
+		else if (username.value.includes("|"))
 		{
 			output.innerHTML = "<p>Please enter a valid username.</p>";
 		}
