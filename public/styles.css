@@ -5,16 +5,52 @@
 }
 body{
 	text-align: center;
-	padding: 10px 0px 0px 0px;
+	padding: 40px;
     font-family: 'CPro';
 	background-color: #89619A
 }
 
 #instruction {
-	padding: 10px 0px 30px 0px;
 	font-size: 24px;
 }
 
+#left0 {
+	width: 32px;
+	font-size: 14px;
+}
+#left1 {
+	width: 32px;
+	font-size: 14px;
+}
+#left2 {
+	width: 32px;
+	font-size: 14px;
+}
+#left3 {
+	width: 32px;
+	font-size: 14px;
+}
+#right0 {
+	width: 32px;
+	font-size: 14px;
+}
+#right1 {
+	width: 32px;
+	font-size: 14px;
+}
+#right2 {
+	width: 32px;
+	font-size: 14px;
+}
+#right3 {
+	width: 32px;
+	font-size: 14px;
+}
+#icons {
+	font-size: 24px;
+	width: 250px;
+	text-align: center;
+}
 
 label{
     box-sizing: border-box;
@@ -46,7 +82,7 @@ button{
     color: #FFDF0F;
     font-size: 18px;
     border: 1px solid #644099;
-    padding: 10px;
+    padding: 5px 0px 5px;
     border-radius: 5px;
 	outline-color: #FFDF0F;
 }

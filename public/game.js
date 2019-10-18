@@ -1,6 +1,5 @@
-var socket = io.connect("67.207.84.116:80")
+var socket = io.connect("192.168.2.30:80")
 var noSleep = new NoSleep();
-
 var roomcode = document.getElementById("roomcode")
 var username = document.getElementById("username")
 var join = document.getElementById("join")
@@ -15,6 +14,8 @@ var answer = document.getElementById("answer")
 var answer1 = document.getElementById("answer1")
 var answer2 = document.getElementById("answer2")
 var reconnect = document.getElementById("reconnect");
+var game = document.getElementById("game");
+var iconfinish = document.getElementById("iconfinish");
 var reconnectbuttons = [document.getElementById("reconnect0"),
 document.getElementById("reconnect1"),
 document.getElementById("reconnect2"),
@@ -23,12 +24,29 @@ document.getElementById("reconnect4"),
 document.getElementById("reconnect5"),
 document.getElementById("reconnect6"),
 document.getElementById("reconnect7")];
+var left0 = document.getElementById("left0");
+var left1 = document.getElementById("left1");
+var left2 = document.getElementById("left2");
+var left3 = document.getElementById("left3");
+var right0 = document.getElementById("right0");
+var right1 = document.getElementById("right1");
+var right2 = document.getElementById("right2");
+var right3 = document.getElementById("right3");
+var icons = document.getElementById("icons");
+var color1 = document.getElementById("color1");
+var color2 = document.getElementById("color2");
+var facetext = document.getElementById("facetext");
+var colors = ["black", "red", "yellow", "green", "blue", "orange", "pink", "gray", "purple", "brown"];
+var faces = ["grimace", "goofy", "embarrassed", "bored", "sad", "angry", "cute", "annoyed", "shifty", "happy"];
+var outlinecolor = Math.floor(Math.random() * 10);
+var bodycolor = Math.floor(Math.random() * 10);
+var face = Math.floor(Math.random() * 10);
 
 answer.style.textDecoration = "underline";
 
 var state = "login"
 
-function ResetElements() 
+function ResetElements()
 {
 	roomcode.style.display = "none";
 	username.style.display = "none";
@@ -43,8 +61,8 @@ function ResetElements()
 	answer.style.display = "none";
 	answer1.style.display = "none";
 	answer2.style.display = "none";
+	icons.style.display = "none";
 };
-
 
 socket.on("roomresponse", function(data){
 	if (data == "false")
@@ -53,17 +71,23 @@ socket.on("roomresponse", function(data){
 	}
 	if (data == "true")
 	{
-		state = "starting";
+		state = "icon";
 		ResetElements();
+		game.style.display = "none";
 		instruction.style.display = "block";
-		instruction.innerHTML = "<p>Waiting for the game to start, hang tight!</p>";
+		icons.style.display = "inline-block";
+		color1.innerHTML = colors[outlinecolor].charAt(0).toUpperCase() + colors[outlinecolor].slice(1);
+		color2.innerHTML = colors[bodycolor].charAt(0).toUpperCase() + colors[bodycolor].slice(1);
+		facetext.innerHTML = faces[face].charAt(0).toUpperCase() + faces[face].slice(1);
+		instruction.innerHTML = "<p>Create Your Icon!</p>";
+		socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
 	}
 });
 
 socket.on("disconnect", function(data){
 	ResetElements();
 	instruction.style.display = "block";
-	instruction.innerHTML = "Hmmm... Looks like you've been disconnected. Please refresh your page and rejoin with the same name.";
+	instruction.innerHTML = "Hmmm... Looks like you've been disconnected. Please refresh your page and rejoin.";
 });
 	
 socket.on("command", function(data){
@@ -78,6 +102,8 @@ socket.on("command", function(data){
 });
 	
 socket.on("rejoining", function(data){
+	state = "starting";
+	game.style.display = "block";
 	var disconnected = data.split("|");
 	instruction.innerHTML = "<p>Select a player to rejoin as.";
 	console.log(disconnected);
@@ -169,6 +195,66 @@ reconnectbuttons[7].addEventListener("click", function(){
 	reconnect.style.display = "none";
 });
 
+right0.addEventListener("click", function(){
+	outlinecolor = outlinecolor + 1;
+	if (outlinecolor > 9)
+	{
+		outlinecolor = 0;
+	}	
+	color1.innerHTML = colors[outlinecolor].charAt(0).toUpperCase() + colors[outlinecolor].slice(1);
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+});
+
+right1.addEventListener("click", function(){
+	bodycolor = bodycolor + 1;
+	if (bodycolor > 9)
+	{
+		bodycolor = 0;
+	}	
+	color2.innerHTML = colors[bodycolor].charAt(0).toUpperCase() + colors[bodycolor].slice(1);
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+});
+
+right2.addEventListener("click", function(){
+	face = face + 1;
+	if (face > 9)
+	{
+		face = 0;
+	}
+	facetext.innerHTML = faces[face].charAt(0).toUpperCase() + faces[face].slice(1);
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+});
+
+left0.addEventListener("click", function(){
+	outlinecolor = outlinecolor - 1;
+	if (outlinecolor < 0)
+	{
+		outlinecolor = 9;
+	}	
+	color1.innerHTML = colors[outlinecolor].charAt(0).toUpperCase() + colors[outlinecolor].slice(1);
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+});
+
+left1.addEventListener("click", function(){
+	bodycolor = bodycolor - 1;
+	if (bodycolor < 0)
+	{
+		bodycolor = 9;
+	}	
+	color2.innerHTML = colors[bodycolor].charAt(0).toUpperCase() + colors[bodycolor].slice(1);
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+});
+
+left2.addEventListener("click", function(){
+	face = face - 1;
+	if (face < 0)
+	{
+		face = 9;
+	}
+	facetext.innerHTML = faces[face].charAt(0).toUpperCase() + faces[face].slice(1);
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+});
+
 join.addEventListener("click", function(){
 	if (state=="login")
 	{
@@ -241,6 +327,15 @@ finish.addEventListener("click", function(){
 		instruction.innerHTML = "<p>Waiting for responses.</p>";
 		state = "finished";
 	}
+});
+
+iconfinish.addEventListener("click", function(){
+	ResetElements();
+	socket.emit("sendicon","finished");
+	game.style.display = "block";
+	instruction.style.display = "block";
+	instruction.innerHTML = "<p>Waiting for the game to start.</p>";
+	state = "starting";
 });
 
 submitquestion.addEventListener("click", function(){

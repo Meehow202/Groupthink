@@ -49,6 +49,11 @@ io.on("connection", (socket) => {
 		socket.to(room).emit("question",data);
     });
 	
+	socket.on("sendicon", function(data){
+		console.log(data);
+		socket.to(room).emit("geticon",{message:data, sender: socket.id, id: ""});
+    });
+	
 	socket.on("finishanswer", function(data){
 		socket.to(room).emit("finishanswer",{message:data, sender: socket.id, id: ""});
     });
