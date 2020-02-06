@@ -1,4 +1,4 @@
-var socket = io.connect("167.172.130.150:80")
+var socket = io.connect("192.168.2.30:80")
 var noSleep = new NoSleep();
 var roomcode = document.getElementById("roomcode")
 var username = document.getElementById("username")
@@ -16,6 +16,8 @@ var answer2 = document.getElementById("answer2")
 var reconnect = document.getElementById("reconnect");
 var game = document.getElementById("game");
 var iconfinish = document.getElementById("iconfinish");
+var option1 = document.getElementById("option1");
+var option2 = document.getElementById("option2");
 var reconnectbuttons = [document.getElementById("reconnect0"),
 document.getElementById("reconnect1"),
 document.getElementById("reconnect2"),
@@ -36,11 +38,48 @@ var icons = document.getElementById("icons");
 var color1 = document.getElementById("color1");
 var color2 = document.getElementById("color2");
 var facetext = document.getElementById("facetext");
+var acctext = document.getElementById("acctext");
 var colors = ["black", "red", "yellow", "green", "blue", "orange", "pink", "gray", "purple", "brown"];
+var accessory = ["none", "black tie", "red tie", "yellow tie", "green tie", "blue tie", "orange tie", "pink tie", "gray tie", "purple tie", "brown tie", "rainbow tie", "baseball cap", "bowler cap", "red scarf", "green scarf", "purple flower", "blue flower", "red flower", "square glasses", "purple shades", "cyan shades", "gray shades", "monocle", "golden monocle"];
 var faces = ["grimace", "goofy", "embarrassed", "bored", "sad", "angry", "cute", "annoyed", "shifty", "happy"];
+var acc = 0;
 var outlinecolor = Math.floor(Math.random() * 10);
 var bodycolor = Math.floor(Math.random() * 10);
 var face = Math.floor(Math.random() * 10);
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.font = "24px CPro";
+defquestions = {
+	"d" : [
+		"Boy, I sure do love _____.",
+		"All aboard! Next stop, _____!",
+		"How should I celebrate my birthday?",
+		"What’s your best burn?",
+		"This Just In! America has Banned _____",
+		"What should I give up this New Years?",
+		"What should I make my password?",
+		"What should I dress as for Halloween?",
+		"Who is your role model?",
+		"How will the world end?",
+		"That’s right! I was _____ all along!",
+		"Do you know why I pulled you over?",
+		"We’re finally going to _____!",
+		"What's your super power?",
+		"What does the fox say?",
+		"Well, it all started with _____.",
+		"What are you thankful for?",
+		"How will I die?",
+		"Who should be our World Leader?",
+		"Why am I so tired?",
+		"How many is too many?",
+		"How should I propose?",
+		"What's your favorite word?",
+		"Stop! It's _____ time!",
+		"What did you do today?",
+		"You know me, always _____."
+	]
+}
+
 
 answer.style.textDecoration = "underline";
 
@@ -62,6 +101,8 @@ function ResetElements()
 	answer1.style.display = "none";
 	answer2.style.display = "none";
 	icons.style.display = "none";
+	option1.style.display = "none";
+	option2.style.display = "none";
 };
 
 socket.on("roomresponse", function(data){
@@ -79,8 +120,9 @@ socket.on("roomresponse", function(data){
 		color1.innerHTML = colors[outlinecolor].charAt(0).toUpperCase() + colors[outlinecolor].slice(1);
 		color2.innerHTML = colors[bodycolor].charAt(0).toUpperCase() + colors[bodycolor].slice(1);
 		facetext.innerHTML = faces[face].charAt(0).toUpperCase() + faces[face].slice(1);
+		acctext.innerHTML = accessory[acc];
 		instruction.innerHTML = "<p>Create Your Icon!</p>";
-		socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+		socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
 	}
 });
 
@@ -97,7 +139,11 @@ socket.on("command", function(data){
 		question.style.display = "block";
 		submitquestion.style.display = "block";
 		instruction.style.display = "block";
-		instruction.innerHTML = "<p>Enter a question, or a statement with a blank.</p>";
+		option1.innerHTML = defquestions["d"][0];
+		option2.innerHTML = defquestions["d"][1];
+		option1.style.display = "block";
+		option2.style.display = "block";
+		instruction.innerHTML = "<p>Choose a question, or enter your own!</p>";
 	}
 });
 	
@@ -202,7 +248,7 @@ right0.addEventListener("click", function(){
 		outlinecolor = 0;
 	}	
 	color1.innerHTML = colors[outlinecolor].charAt(0).toUpperCase() + colors[outlinecolor].slice(1);
-	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
 });
 
 right1.addEventListener("click", function(){
@@ -212,7 +258,7 @@ right1.addEventListener("click", function(){
 		bodycolor = 0;
 	}	
 	color2.innerHTML = colors[bodycolor].charAt(0).toUpperCase() + colors[bodycolor].slice(1);
-	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
 });
 
 right2.addEventListener("click", function(){
@@ -222,7 +268,17 @@ right2.addEventListener("click", function(){
 		face = 0;
 	}
 	facetext.innerHTML = faces[face].charAt(0).toUpperCase() + faces[face].slice(1);
-	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
+});
+
+right3.addEventListener("click", function(){
+	acc = acc + 1;
+	if (acc >= accessory.length)
+	{
+		acc = 0;
+	}
+	acctext.innerHTML = accessory[acc];
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
 });
 
 left0.addEventListener("click", function(){
@@ -232,7 +288,7 @@ left0.addEventListener("click", function(){
 		outlinecolor = 9;
 	}	
 	color1.innerHTML = colors[outlinecolor].charAt(0).toUpperCase() + colors[outlinecolor].slice(1);
-	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
 });
 
 left1.addEventListener("click", function(){
@@ -242,7 +298,7 @@ left1.addEventListener("click", function(){
 		bodycolor = 9;
 	}	
 	color2.innerHTML = colors[bodycolor].charAt(0).toUpperCase() + colors[bodycolor].slice(1);
-	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
 });
 
 left2.addEventListener("click", function(){
@@ -252,7 +308,17 @@ left2.addEventListener("click", function(){
 		face = 9;
 	}
 	facetext.innerHTML = faces[face].charAt(0).toUpperCase() + faces[face].slice(1);
-	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face));
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
+});
+
+left3.addEventListener("click", function(){
+	acc = acc - 1;
+	if (acc < 0)
+	{
+		acc = accessory.length - 1;
+	}
+	acctext.innerHTML = accessory[acc];
+	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
 });
 
 join.addEventListener("click", function(){
@@ -338,6 +404,16 @@ iconfinish.addEventListener("click", function(){
 	state = "starting";
 });
 
+username.addEventListener("input", function(){
+	console.log("howdy");
+	console.log(ctx.measureText(username.value).width);
+	
+	if (ctx.measureText(username.value).width > 150)
+	{
+		username.value = username.value.slice(0,-1);
+	}
+});
+
 submitquestion.addEventListener("click", function(){
 	if (state == "starting")
 	{
@@ -349,3 +425,29 @@ submitquestion.addEventListener("click", function(){
 		instruction.innerHTML = "<p>Players are submitting answers to your very important question.</p>";
 	}
 });
+
+option1.addEventListener("click", function(){
+	if (state == "starting")
+	{
+		state = "gettinganswers";
+		socket.emit("sendquestion",option1.innerHTML)
+		question.value = "";
+		ResetElements();
+		instruction.style.display = "block";
+		instruction.innerHTML = "<p>Players are submitting answers to your very important question.</p>";
+	}
+});
+
+option2.addEventListener("click", function(){
+	if (state == "starting")
+	{
+		state = "gettinganswers";
+		socket.emit("sendquestion",option2.innerHTML)
+		question.value = "";
+		ResetElements();
+		instruction.style.display = "block";
+		instruction.innerHTML = "<p>Players are submitting answers to your very important question.</p>";
+	}
+});
+
+

@@ -12,6 +12,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     </head>
     <body>
+		<canvas id="myCanvas" width="0" height="0" style="display:none"></canvas>
 		<div id="instruction" style="display:block"><p>Welcome to Groupthink!</br></br> Join a game.</p></div>
 		<div id="answer" style="display:none"></div>
 		<div id="reconnect" style="display:none">
@@ -37,6 +38,10 @@
 		<button id = "left2" style="float: left;"><</button>
 		<p id="facetext" style="display:inline"></p>
 		<button id = "right2" style="float: right;">></button>
+		<p>ACCESSORY</p>
+		<button id = "left3" style="float: left;"><</button>
+		<p id="acctext" style="display:inline"></p>
+		<button id = "right3" style="float: right;">></button>
 		<p></p>
 		<button id = "iconfinish" style="display:block">Done!</button>
 		<button id = "left3" style="display:none"><</button>
@@ -46,15 +51,19 @@
 		<input id = "username" type = "text" style="display:block" placeholder = "Enter your Username"/><br>
         <input id = "roomcode" type = "text" autocapitalize = "none" style="display:block" placeholder = "Enter your Room Code"/><br>
 		<input style="display:none" id = "letter" autocapitalize = "none" type = "text" placeholder = "Enter your Letter" maxlength="1"/>
+		<button id = "option1" style="display:none">Question 1</button>
+		<p style="display:block"><br></p>
+		<button id = "option2" style="display:none">Question 2</button>
+		<p style="display:block"><br></p>
 		<input style="display:none" id = "question" type = "text" placeholder = "Enter your Question"/>
 		<button id = "join" style="display:block">Join</button>
 		<button id = "answer1" style="display:none">Answer 1</button>
 		<p style="display:block"><br></p>
 		<button id = "answer2" style="display:none">Answer 2</button>
+		<button id = "submitquestion" style="display:none">Submit Question</button>
 		<button id = "enter" style="display:none">Submit Letter</button>
 		<div style="display:block"><p><br></p></div>
 		<button id = "finish" style="display:none">Finish Answer</button>
-		<button id = "submitquestion" style="display:none">Submit Question</button>
 		<div id="output" style="display:block"></div>
 		</div>
 		<script src="/game.js"></script>

@@ -51,6 +51,9 @@ body{
 	width: 250px;
 	text-align: center;
 }
+#acctext{
+	text-transform: capitalize;
+}
 
 label{
     box-sizing: border-box;
