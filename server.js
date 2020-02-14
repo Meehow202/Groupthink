@@ -19,12 +19,19 @@ io.on("connection", (socket) => {
 	var roomCreator = false;
 	
     socket.on("createroom", function(data){
-        console.log("Created Room",data);
-		socket.join(data);
-		openrooms.push(data);
-		room = data;
-		roomCreator = true;
-		console.log(openrooms);
+		if (openrooms.includes(data) == false)
+		{
+			socket.join(data);
+			openrooms.push(data);
+			room = data;
+			roomCreator = true;
+			console.log(openrooms);
+			socket.emit("roomsuccess", {message:"true", sender: "", id: ""});
+		}
+		else
+		{
+			socket.emit("roomsuccess", {message:"false", sender: "", id: ""});
+		}
     });
 	
 	socket.on("joinroom", function(data){

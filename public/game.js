@@ -1,4 +1,4 @@
-var socket = io.connect("192.168.2.30:80")
+var socket = io.connect("167.172.130.150:80")
 var noSleep = new NoSleep();
 var roomcode = document.getElementById("roomcode")
 var username = document.getElementById("username")
@@ -39,6 +39,7 @@ var color1 = document.getElementById("color1");
 var color2 = document.getElementById("color2");
 var facetext = document.getElementById("facetext");
 var acctext = document.getElementById("acctext");
+kickstarternames = ["Meehow", "Fitzy", "Hannah", "MikeMemme", "LeslieMemme", "MattMemme", "AlexMemme", "Fitzy", "Jambrew", "Aidan", "Erin", "Andrew"];
 var colors = ["black", "red", "yellow", "green", "blue", "orange", "pink", "gray", "purple", "brown"];
 var accessory = ["none", "black tie", "red tie", "yellow tie", "green tie", "blue tie", "orange tie", "pink tie", "gray tie", "purple tie", "brown tie", "rainbow tie", "baseball cap", "bowler cap", "red scarf", "green scarf", "purple flower", "blue flower", "red flower", "square glasses", "purple shades", "cyan shades", "gray shades", "monocle", "golden monocle"];
 var faces = ["grimace", "goofy", "embarrassed", "bored", "sad", "angry", "cute", "annoyed", "shifty", "happy"];
@@ -64,19 +65,44 @@ defquestions = {
 		"That’s right! I was _____ all along!",
 		"Do you know why I pulled you over?",
 		"We’re finally going to _____!",
-		"What's your super power?",
-		"What does the fox say?",
+		"What's your superpower?",
 		"Well, it all started with _____.",
 		"What are you thankful for?",
 		"How will I die?",
 		"Who should be our World Leader?",
-		"Why am I so tired?",
 		"How many is too many?",
 		"How should I propose?",
 		"What's your favorite word?",
 		"Stop! It's _____ time!",
 		"What did you do today?",
-		"You know me, always _____."
+		"You know me, always _____.",
+		"What's the best family friendly swear word?",
+		"No thank you sir, I prefer _____.",
+		"The power of _____ compels you!",
+		"How would you describe me, in one word?",
+		"What would you buy first if you won the lottery?",
+		"What song should I play for the first dance at my wedding?",
+		"Welcome to prison. What crime are you in for?",
+		"How should I introduce myself at the party tonight?",
+		"What should I put on my custom license plate?",
+		"What's at the end of the rainbow?",
+		"Oh no! Not _____!",
+		"Today, _____. Tomorrow, the world!",
+		"What rumor should I start about my enemy?",
+		"Tune in at 7 for a new episode of _____!",
+		"What should I name my pet dog?",
+		"Have you forgotten _____?!",
+		"What's the secret to a happy life?",
+		"What is the worst Christmas gift?",
+		"What's your zombie apocalypse plan?",
+		"Where should I hide the body?",
+		"What would your candle scent be?",
+		"If you could time travel, where's the first place you would go?",
+		"What's a good conversation starter?",
+		"What should my yearbook quote be?",
+		"What are we doing this weekend?",
+		"You, my dear, are _____.",
+		
 	]
 }
 
@@ -139,8 +165,12 @@ socket.on("command", function(data){
 		question.style.display = "block";
 		submitquestion.style.display = "block";
 		instruction.style.display = "block";
-		option1.innerHTML = defquestions["d"][0];
-		option2.innerHTML = defquestions["d"][1];
+		option1.innerHTML = defquestions["d"][Math.floor(Math.random() * defquestions["d"].length)];
+		option2.innerHTML = defquestions["d"][Math.floor(Math.random() * defquestions["d"].length)];
+		while (option1.innerHTML == option2.innerHTML)
+		{
+			option2.innerHTML = defquestions["d"][Math.floor(Math.random() * defquestions["d"].length)];
+		}
 		option1.style.display = "block";
 		option2.style.display = "block";
 		instruction.innerHTML = "<p>Choose a question, or enter your own!</p>";
@@ -277,6 +307,10 @@ right3.addEventListener("click", function(){
 	{
 		acc = 0;
 	}
+	if (acc >= accessory.length - 1 && kickstarternames.includes(username.value) == false )
+	{
+		acc = 0;
+	}
 	acctext.innerHTML = accessory[acc];
 	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
 });
@@ -316,6 +350,10 @@ left3.addEventListener("click", function(){
 	if (acc < 0)
 	{
 		acc = accessory.length - 1;
+	}
+	if (acc < 0 && kickstarternames.includes(username.value)==false)
+	{
+		acc = accessory.length - 2;
 	}
 	acctext.innerHTML = accessory[acc];
 	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
