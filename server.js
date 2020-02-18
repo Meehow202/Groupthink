@@ -124,5 +124,14 @@ io.on("connection", (socket) => {
 			socket.to(room).emit("leavinguser", socket.id)
 		}
     });
+	socket.on("closeroom", function(data){
+		if (roomCreator)
+		{
+			var index = openrooms.indexOf(room);
+			if (index > -1) {
+				openrooms.splice(index, 1);
+			}
+		}
+    });
 });
 

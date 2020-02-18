@@ -347,13 +347,13 @@ left2.addEventListener("click", function(){
 
 left3.addEventListener("click", function(){
 	acc = acc - 1;
-	if (acc < 0)
-	{
-		acc = accessory.length - 1;
-	}
 	if (acc < 0 && kickstarternames.includes(username.value)==false)
 	{
 		acc = accessory.length - 2;
+	}
+	if (acc < 0)
+	{
+		acc = accessory.length - 1;
 	}
 	acctext.innerHTML = accessory[acc];
 	socket.emit("sendicon",String(outlinecolor)+String(bodycolor)+String(face)+String(acc));
