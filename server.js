@@ -4,7 +4,6 @@ var socket = require("socket.io")
 // App setup
 
 var app = express();
-console.log("*** STARTING SERVER ***")
 var server = app.listen(80,function(){console.log("Listening for requests...")});
 
 app.use(express.static("public"));
@@ -13,8 +12,6 @@ var io = socket(server);
 var openrooms = [];
 
 io.on("connection", (socket) => {
-
-    console.log("made socket connection", socket.id);
 	var room = "";
 	var roomCreator = false;
 	
@@ -35,7 +32,6 @@ io.on("connection", (socket) => {
     });
 	
 	socket.on("joinroom", function(data){
-        console.log(data.user,"Is Trying To Joining", data.room);
 		if (openrooms.includes(data.room)) {
 			room = data.room;
 			socket.emit("roomresponse","true");
@@ -46,18 +42,16 @@ io.on("connection", (socket) => {
 		}
     });
 	
-	socket.on("clientcommand", function(data){
+	socket.on("askquestion", function(data){
 		var parsed = JSON.parse(data);
-        io.to(parsed.id).emit("command",parsed.message);
+        io.to(parsed.id).emit("getquestion",parsed);
     });
 	
 	socket.on("sendquestion", function(data){
-		console.log(data);
 		socket.to(room).emit("question",data);
     });
 	
 	socket.on("sendicon", function(data){
-		console.log(data);
 		socket.to(room).emit("geticon",{message:data, sender: socket.id, id: ""});
     });
 	
@@ -71,14 +65,11 @@ io.on("connection", (socket) => {
     });
 	
 	socket.on("rejoining", function(data){
-		console.log("reconnecting user");
 		var parsed = JSON.parse(data);
-		console.log(parsed.message);
         io.to(parsed.id).emit("rejoining",parsed.message);
     });
 	
 	socket.on("reconnectuser", function(data){
-		console.log(data);
 		socket.to(room).emit("reconnectuser",{message:data.oldname, sender: socket.id, id: data.newname});
     });
 	
@@ -88,12 +79,10 @@ io.on("connection", (socket) => {
     });
 	
 	socket.on("addletter", function(data){
-		console.log(data);
 		socket.to(room).emit("addletter",{message:data, sender: socket.id, id: ""});
     });
 	
 	socket.on("chosenanswer", function(data){
-		console.log(data)
 		socket.to(room).emit("chooseanswer",data);
     });
 	
@@ -109,10 +98,8 @@ io.on("connection", (socket) => {
     });
 	
 	socket.on("disconnect", function(data){
-        console.log(socket.id+" Disconnected.");
 		if (roomCreator)
 		{
-			console.log(data);
 			var index = openrooms.indexOf(room);
 			if (index > -1) {
 				openrooms.splice(index, 1);

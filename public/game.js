@@ -101,8 +101,13 @@ defquestions = {
 		"What's a good conversation starter?",
 		"What should my yearbook quote be?",
 		"What are we doing this weekend?",
-		"You, my dear, are _____.",
-		
+		"You, my dear, are _____."
+	],
+		"p" : [
+		"You know that / likes ____?"
+	],
+		"n" : [
+		"Boy do I love the taste of ____."
 	]
 }
 
@@ -158,23 +163,27 @@ socket.on("disconnect", function(data){
 	instruction.innerHTML = "Hmmm... Looks like you've been disconnected. Please refresh your page and rejoin.";
 });
 	
-socket.on("command", function(data){
-	if (data == "askquestion")
+socket.on("getquestion", function(data){
+	ResetElements();
+	console.log(data.message);
+	console.log(data.sender);
+	question.style.display = "block";
+	submitquestion.style.display = "block";
+	instruction.style.display = "block";
+	letter1 = data.message[Math.floor(Math.random() * data.message.length)]
+	option1.innerHTML = defquestions[letter1][Math.floor(Math.random() * defquestions[letter1].length)];
+	letter2 = data.message[Math.floor(Math.random() * data.message.length)]
+	option2.innerHTML = defquestions[letter2][Math.floor(Math.random() * defquestions[letter2].length)];
+	while (option1.innerHTML == option2.innerHTML)
 	{
-		ResetElements();
-		question.style.display = "block";
-		submitquestion.style.display = "block";
-		instruction.style.display = "block";
-		option1.innerHTML = defquestions["d"][Math.floor(Math.random() * defquestions["d"].length)];
-		option2.innerHTML = defquestions["d"][Math.floor(Math.random() * defquestions["d"].length)];
-		while (option1.innerHTML == option2.innerHTML)
-		{
-			option2.innerHTML = defquestions["d"][Math.floor(Math.random() * defquestions["d"].length)];
-		}
-		option1.style.display = "block";
-		option2.style.display = "block";
-		instruction.innerHTML = "<p>Choose a question, or enter your own!</p>";
+		letter2 = data.message[Math.floor(Math.random() * data.message.length)]
+		option2.innerHTML = defquestions[letter2][Math.floor(Math.random() * defquestions[letter2].length)];
 	}
+	option1.innerHTML = option1.innerHTML.replace("/",data.sender);
+	option2.innerHTML = option2.innerHTML.replace("/",data.sender);
+	option1.style.display = "block";
+	option2.style.display = "block";
+	instruction.innerHTML = "<p>Choose a question, or enter your own!</p>";
 });
 	
 socket.on("rejoining", function(data){
@@ -182,7 +191,6 @@ socket.on("rejoining", function(data){
 	game.style.display = "block";
 	var disconnected = data.split("|");
 	instruction.innerHTML = "<p>Select a player to rejoin as.";
-	console.log(disconnected);
 	var i = 0;
 	for (i = 0; i < disconnected.length; i++)
 	{
@@ -213,7 +221,10 @@ socket.on("getvote", function(data){
 		answer1.innerHTML = data.answer1;
 		answer2.innerHTML = data.answer2;
 		answer1.style.display = "block";
-		answer2.style.display = "block";
+		if (answer2.innerHTML!="")
+		{
+			answer2.style.display = "block";
+		}
 		state = "finished";
 	}
 });
@@ -443,8 +454,6 @@ iconfinish.addEventListener("click", function(){
 });
 
 username.addEventListener("input", function(){
-	console.log("howdy");
-	console.log(ctx.measureText(username.value).width);
 	
 	if (ctx.measureText(username.value).width > 150)
 	{
