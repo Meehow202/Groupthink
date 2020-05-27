@@ -104,10 +104,14 @@ defquestions = {
 		"You, my dear, are _____."
 	],
 		"p" : [
-		"You know that / likes ____?"
+		"You know that | likes ____?"
 	],
 		"n" : [
-		"Boy do I love the taste of ____."
+		"Boy do I love the taste of ____.",
+		"What's your X-rated super power?",
+		"What type of porn are you into?",
+		"Damn, _____ is the best fetish.",
+		""
 	]
 }
 
@@ -170,6 +174,10 @@ socket.on("getquestion", function(data){
 	question.style.display = "block";
 	submitquestion.style.display = "block";
 	instruction.style.display = "block";
+	if (data.message=="")
+	{
+		data.message="d";
+	}
 	letter1 = data.message[Math.floor(Math.random() * data.message.length)]
 	option1.innerHTML = defquestions[letter1][Math.floor(Math.random() * defquestions[letter1].length)];
 	letter2 = data.message[Math.floor(Math.random() * data.message.length)]
@@ -179,8 +187,8 @@ socket.on("getquestion", function(data){
 		letter2 = data.message[Math.floor(Math.random() * data.message.length)]
 		option2.innerHTML = defquestions[letter2][Math.floor(Math.random() * defquestions[letter2].length)];
 	}
-	option1.innerHTML = option1.innerHTML.replace("/",data.sender);
-	option2.innerHTML = option2.innerHTML.replace("/",data.sender);
+	option1.innerHTML = option1.innerHTML.replace("|",data.sender);
+	option2.innerHTML = option2.innerHTML.replace("|",data.sender);
 	option1.style.display = "block";
 	option2.style.display = "block";
 	instruction.innerHTML = "<p>Choose a question, or enter your own!</p>";
